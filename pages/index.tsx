@@ -49,9 +49,14 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
           className={styles.postImage}
         />
         <h2 className={styles.postTitle}>{post.title}</h2>
+                      <p>{post.excerpt}</p>
+
         <div className={styles.postMeta}>
-             <p>Danh mục: {post.categories.nodes.map((category) => category.name).join(', ')}</p>
-              <p>Ngày đăng: {new Date(post.date).toLocaleDateString()}</p>
+
+          <span className={styles.postCategory}>
+            {post.categories.nodes.map((category) => category.name).join(', ')}
+          </span>
+          <span className={styles.postDate}>{new Date(post.modifiedGmt).toLocaleDateString()}</span>
 
         </div>
       </>
