@@ -84,10 +84,10 @@ const Post: React.FC<PostProps> = (props) => {
 			<Head>
   {/* Ẩn tiêu đề và tóm tắt */}
   {/* <meta property="og:title" content={post.title} />
+    <meta property="og:description" content="ㅤ" />
    */}
 
-  <meta property="og:url" content="https://chanlysong.net/wp-content/uploads/2024/03/b14b124e8f5d4665b4b689f5b5f5d183.pngtplv-0es2k971ck-image.png" />
-  <meta property="og:description" content="ㅤ" />
+  <meta property="og:url" content={post.featuredImage.node.sourceUrl} />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content={host.split('.')[0]} />
