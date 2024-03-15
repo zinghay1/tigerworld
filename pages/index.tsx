@@ -42,18 +42,22 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
             <div key={post.id} className={styles.postCard}>
 <Link href={post.id ? `/${post.id.split(':')[1]}` : '#'}>
   <a>
-    <img
-      src={post.featuredImage.node.sourceUrl}
-      alt={post.featuredImage.node.altText || post.title}
-      className={styles.postImage}
-    />
-    <h2 className={styles.postTitle}>{post.title}</h2>
-    <div className={styles.postMeta}>
-      <span className={styles.postCategory}>
-        {post.categories.nodes.map((category) => category.name).join(', ')}
-      </span>
-      <span className={styles.postDate}>{new Date(post.modifiedGmt).toLocaleDateString()}</span>
-    </div>
+    {post.id && ( // Kiểm tra nếu post.id tồn tại
+      <>
+        <img
+          src={post.featuredImage.node.sourceUrl}
+          alt={post.featuredImage.node.altText || post.title}
+          className={styles.postImage}
+        />
+        <h2 className={styles.postTitle}>{post.title}</h2>
+        <div className={styles.postMeta}>
+          <span className={styles.postCategory}>
+            {post.categories.nodes.map((category) => category.name).join(', ')}
+          </span>
+          <span className={styles.postDate}>{new Date(post.modifiedGmt).toLocaleDateString()}</span>
+        </div>
+      </>
+    )}
   </a>
 </Link>
             </div>
