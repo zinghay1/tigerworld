@@ -107,7 +107,6 @@ const Post: React.FC<PostProps> = (props) => {
 
   return (
     <>
-      <CustomHead postData={postData} />
       <div className="post-container">
         <h1>{post.title}</h1>
         <img
