@@ -40,7 +40,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
         <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
-              <Link href={`/${post.id}`}>
+              <Link href={host}/${path}>
                 <a>
                   <img
                     src={post.featuredImage.node.sourceUrl}
