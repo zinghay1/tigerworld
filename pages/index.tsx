@@ -20,6 +20,7 @@ interface Post {
     }[];
   };
   modifiedGmt: string;
+  link: string; // Thêm trường link
 }
 
 interface HomeProps {
@@ -36,28 +37,25 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Recent Posts</h1>
-
-
         <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
               <Link href={post.link}>
-        <img
-          src={post.featuredImage.node.sourceUrl}
-          alt={post.featuredImage.node.altText || post.title}
-          className={styles.postImage}
-        />
-        <h2 className={styles.postTitle}>{post.title}</h2>
-        <div className={styles.postMeta}>
-          <span className={styles.postCategory}>
-            {post.categories.nodes.map((category) => category.name).join(', ')}
-          </span>
-          <span className={styles.postDate}>{new Date(post.modifiedGmt).toLocaleDateString()}</span>
-        </div>
-      </>
-    )}
-  </a>
-</Link>
+                <a>
+                  <img
+                    src={post.featuredImage.node.sourceUrl}
+                    alt={post.featuredImage.node.altText || post.title}
+                    className={styles.postImage}
+                  />
+                  <h2 className={styles.postTitle}>{post.title}</h2>
+                  <div className={styles.postMeta}>
+                    <span className={styles.postCategory}>
+                      {post.categories.nodes.map((category) => category.name).join(', ')}
+                    </span>
+                    <span className={styles.postDate}>{new Date(post.modifiedGmt).toLocaleDateString()}</span>
+                  </div>
+                </a>
+              </Link>
             </div>
           ))}
         </div>
@@ -89,6 +87,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
             }
           }
           modifiedGmt
+          link
         }
       }
     }
@@ -103,8 +102,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
     },
   };
 };
-
-export default Home;
-
 
 export default Home;
