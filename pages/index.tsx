@@ -40,7 +40,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
         <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
-              <Link href={post.id ? `/${post.id.split(':')[1]}` : '#'}>
+              <Link href={`/${post.id.split(':').join('/')}`}>
                 <a>
                   <img
                     src={post.featuredImage.node.sourceUrl}
@@ -65,42 +65,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const endpoint = process.env.GRAPHQL_ENDPOINT as string;
-  const graphQLClient = new GraphQLClient(endpoint);
-
-  const query = gql`
-    {
-      posts(first: 20, where: { orderby: { field: MODIFIED, order: DESC } }) {
-        nodes {
-          id
-          title
-          excerpt
-          featuredImage {
-            node {
-              sourceUrl
-              altText
-            }
-          }
-          categories {
-            nodes {
-              name
-            }
-          }
-          modifiedGmt
-        }
-      }
-    }
-  `;
-
-  const data = await graphQLClient.request(query);
-  const posts: Post[] = data.posts.nodes;
-
-  return {
-    props: {
-      posts,
-    },
-    revalidate: 600, // Regenerate page every 10 minutes
-  };
+  // ...
 };
 
 export default Home;
