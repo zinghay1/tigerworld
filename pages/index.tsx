@@ -33,10 +33,8 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
         <title>Recent Posts</title>
         <meta name="description" content="Recent blog posts" />
       </Head>
-
       <main className={styles.main}>
         <h1 className={styles.title}>Recent Posts</h1>
-
         <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
