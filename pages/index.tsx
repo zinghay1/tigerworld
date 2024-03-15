@@ -38,7 +38,11 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>{host.split('.')[0]}</h1>
+        <h1 className={styles.title}>
+        <a href={posts[0]?.url} rel="home">
+          {host.split('.')[0]}
+        </a>  
+          </h1>
         <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
