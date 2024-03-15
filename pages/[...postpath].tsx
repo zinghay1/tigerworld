@@ -84,7 +84,7 @@ const Post: React.FC<PostProps> = (props) => {
 			<Head>
   {/* Ẩn tiêu đề và tóm tắt */}
   {/* <meta property="og:title" content={post.title} />
-  <meta property="og:description" content={removeTags(post.excerpt)} /> */}
+  <meta property="og:description" content="" /> */}
 
   <meta property="og:url" content={post.featuredImage.node.sourceUrl} />
   <meta property="og:type" content="article" />
