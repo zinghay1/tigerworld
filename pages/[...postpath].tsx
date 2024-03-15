@@ -23,30 +23,33 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 			},
 		};
 	}
-	const query = gql`
-		{
-			post(id: "/${path}/", idType: URI) {
-				id
-				excerpt
-				title
-				link
-				dateGmt
-				modifiedGmt
-				content
-				author {
-					node {
-						name
-					}
-				}
-				featuredImage {
-					node {
-						sourceUrl
-						altText
-					}
-				}
-			}
-		}
-	`;
+
+const query = gql`
+  {
+    post(id: "/${path}/", idType: URI) {
+      id
+      excerpt
+      title
+      link
+      dateGmt
+      modifiedGmt
+      content
+      author {
+        node {
+          name
+        }
+      }
+      featuredImage {
+        node {
+          sourceUrlLarge
+          altText
+        }
+      }
+    }
+  }
+`;
+	
+	
 
 	const data = await graphQLClient.request(query);
 	if (!data.post) {
@@ -81,19 +84,18 @@ const Post: React.FC<PostProps> = (props) => {
 
 	return (
 		<>
-			<Head>
+<Head>
   {/* Ẩn tiêu đề và tóm tắt */}
   {/* <meta property="og:title" content={post.title} />
-     <meta name="og:description" content="" />
-   */}
-
-  <meta name="og:url" content={post.featuredImage.node.sourceUrl} />
+  */}
+  <meta name="og:url" content={post.featuredImage.node.sourceUrlLarge} />
+  <meta name="og:description" content=" " />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content={host.split('.')[0]} />
   <meta property="article:published_time" content={post.dateGmt} />
   <meta property="article:modified_time" content={post.modifiedGmt} />
-  <meta property="og:image" content={post.featuredImage.node.sourceUrl} />
+  <meta property="og:image" content={post.featuredImage.node.sourceUrlLarge} />
   <title> </title>
 </Head>
 			<div className="post-container">
