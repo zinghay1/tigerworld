@@ -23,33 +23,30 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 			},
 		};
 	}
-
-const query = gql`
-  {
-    post(id: "/${path}/", idType: URI) {
-      id
-      excerpt
-      title
-      link
-      dateGmt
-      modifiedGmt
-      content
-      author {
-        node {
-          name
-        }
-      }
-      featuredImage {
-        node {
-          sourceUrlLarge
-          altText
-        }
-      }
-    }
-  }
-`;
-	
-	
+	const query = gql`
+		{
+			post(id: "/${path}/", idType: URI) {
+				id
+				excerpt
+				title
+				link
+				dateGmt
+				modifiedGmt
+				content
+				author {
+					node {
+						name
+					}
+				}
+				featuredImage {
+					node {
+						sourceUrl
+						altText
+					}
+				}
+			}
+		}
+	`;
 
 	const data = await graphQLClient.request(query);
 	if (!data.post) {
@@ -73,8 +70,7 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = (props) => {
-  const { post, host, path } = props;
-
+	const { post, host, path } = props;
 
 	// to remove tags from excerpt
 	const removeTags = (str: string) => {
@@ -83,41 +79,33 @@ const Post: React.FC<PostProps> = (props) => {
 		return str.replace(/(<([^>]+)>)/gi, '').replace(/\[[^\]]*\]/, '');
 	};
 
-<Head>
+	return (
+		<>
+			<Head>
   {/* Ẩn tiêu đề và tóm tắt */}
   {/* <meta property="og:title" content={post.title} />
-  */}
-  <meta name="og:url" content={post.featuredImage.node.sourceUrlLarge} />
-  <meta name="og:description" content=" " />
+   */}
+
+  <meta name="og:url" content={post.featuredImage.node.sourceUrl} />
+ <meta name="og:description" content=" " />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content={host.split('.')[0]} />
   <meta property="article:published_time" content={post.dateGmt} />
   <meta property="article:modified_time" content={post.modifiedGmt} />
-  <meta property="og:image" content={post.featuredImage.node.sourceUrlLarge} />
+  <meta property="og:image" content={post.featuredImage.node.sourceUrl} />
   <title> </title>
 </Head>
-			const postData = {
-    title: post.title,
-    description: removeTags(post.excerpt),
-    imageUrl: post.featuredImage.node.sourceUrlLarge,
-    publishedTime: post.dateGmt,
-    modifiedTime: post.modifiedGmt,
-  };
-
-  return (
-    <>
-      <div className="post-container">
-        <h1>{post.title}</h1>
-        <img
-          src={post.featuredImage.node.sourceUrlLarge}
-          alt={post.featuredImage.node.altText || post.title}
-        />
-        <article dangerouslySetInnerHTML={{ __html: post.content }} />
-      </div>
-    </>
-  );
+			<div className="post-container">
+				<h1>{post.title}</h1>
+				<img
+					src={post.featuredImage.node.sourceUrl}
+					alt={post.featuredImage.node.altText || post.title}
+				/>
+				<article dangerouslySetInnerHTML={{ __html: post.content }} />
+			</div>
+		</>
+	);
 };
-
 
 export default Post;
