@@ -73,7 +73,8 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = (props) => {
-	const { post, host, path } = props;
+  const { post, host, path } = props;
+
 
 	// to remove tags from excerpt
 	const removeTags = (str: string) => {
@@ -82,8 +83,6 @@ const Post: React.FC<PostProps> = (props) => {
 		return str.replace(/(<([^>]+)>)/gi, '').replace(/\[[^\]]*\]/, '');
 	};
 
-	return (
-		<>
 <Head>
   {/* Ẩn tiêu đề và tóm tắt */}
   {/* <meta property="og:title" content={post.title} />
@@ -98,16 +97,28 @@ const Post: React.FC<PostProps> = (props) => {
   <meta property="og:image" content={post.featuredImage.node.sourceUrlLarge} />
   <title> </title>
 </Head>
-			<div className="post-container">
-				<h1>{post.title}</h1>
-				<img
-					src={post.featuredImage.node.sourceUrl}
-					alt={post.featuredImage.node.altText || post.title}
-				/>
-				<article dangerouslySetInnerHTML={{ __html: post.content }} />
-			</div>
-		</>
-	);
+			const postData = {
+    title: post.title,
+    description: removeTags(post.excerpt),
+    imageUrl: post.featuredImage.node.sourceUrlLarge,
+    publishedTime: post.dateGmt,
+    modifiedTime: post.modifiedGmt,
+  };
+
+  return (
+    <>
+      <CustomHead postData={postData} />
+      <div className="post-container">
+        <h1>{post.title}</h1>
+        <img
+          src={post.featuredImage.node.sourceUrlLarge}
+          alt={post.featuredImage.node.altText || post.title}
+        />
+        <article dangerouslySetInnerHTML={{ __html: post.content }} />
+      </div>
+    </>
+  );
 };
+
 
 export default Post;
