@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { GraphQLClient, gql } from 'graphql-request';
 import styles from '../styles/Home.module.css';
 
@@ -20,7 +21,8 @@ interface Post {
     }[];
   };
   modifiedGmt: string;
-  link: string; // Thêm trường link
+  uri: string;
+  link: string;
 }
 
 interface HomeProps {
@@ -64,9 +66,10 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const endpoint = process.env.GRAPHQL_ENDPOINT as string;
   const graphQLClient = new GraphQLClient(endpoint);
+  const baseUrl = `https://${req.headers.host}`;
 
   const query = gql`
     {
@@ -87,14 +90,17 @@ export const getServerSideProps: GetServerSideProps = async () => {
             }
           }
           modifiedGmt
-          link
+          uri
         }
       }
     }
   `;
 
   const data = await graphQLClient.request(query);
-  const posts: Post[] = data.posts.nodes;
+  const posts: Post[] = data.posts.nodes.map((post: any) => ({
+    ...post,
+    link: `${baseUrl}/${post.uri}`,
+  }));
 
   return {
     props: {
