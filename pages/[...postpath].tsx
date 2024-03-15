@@ -84,11 +84,12 @@ const Post: React.FC<PostProps> = (props) => {
 			<Head>
   {/* Ẩn tiêu đề và tóm tắt */}
   {/* <meta property="og:title" content={post.title} />
-  <meta property="og:description" content="" /> */}
+   */}
 
   <meta property="og:url" content={post.featuredImage.node.sourceUrl} />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_US" />
+   <meta property="og:description" content=" " />
   <meta property="og:site_name" content={host.split('.')[0]} />
   <meta property="article:published_time" content={post.dateGmt} />
   <meta property="article:modified_time" content={post.modifiedGmt} />
