@@ -40,9 +40,9 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
         <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
-<Link href={post.id ? `/${post.id.split(':')[1]}` : '#'}>
+<Link href={`/${post.id.split(':').join('/')}`}>
   <a>
-    {post.id && ( // Kiểm tra nếu post.id tồn tại
+    {post.id && (
       <>
         <img
           src={post.featuredImage.node.sourceUrl}
