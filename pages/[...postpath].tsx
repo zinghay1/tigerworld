@@ -69,11 +69,8 @@ interface PostProps {
 	path: string;
 }
 
-
-	const Post: React.FC<PostProps> = (props) => {
-    const { post, host } = props;
-
-
+const Post: React.FC<PostProps> = (props) => {
+	const { post, host, path } = props;
 
 	// to remove tags from excerpt
 	const removeTags = (str: string) => {
@@ -98,7 +95,7 @@ interface PostProps {
   <meta property="article:published_time" content={post.dateGmt} />
   <meta property="article:modified_time" content={post.modifiedGmt} />
   <meta property="og:image" content={post.featuredImage.node.sourceUrl} />
-                <title>{post.title}</title>
+  <title> </title>
 </Head>
 			<div className="post-container">
 				<h1>{post.title}</h1>
