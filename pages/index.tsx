@@ -34,7 +34,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   const { page } = router.query;
 
   // Số bài viết hiển thị trên mỗi trang
-  const postsPerPage = 10;
+  const postsPerPage = 12;
 
   // Tính toán số trang
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -63,8 +63,8 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Blogs News</h1>
-        <div className={styles.postGrid}>
-          {currentPosts.map((post) => (
+ <div className={styles.postGrid}>
+          {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
               <Link href={post.link}>
                 <a>
