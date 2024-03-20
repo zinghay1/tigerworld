@@ -27,33 +27,43 @@ interface Post {
 
 interface HomeProps {
   posts: Post[];
+  hasNextPage: boolean;
+  endCursor: string;
 }
 
-const Home: NextPage<HomeProps> = ({ posts }) => {
+const Home: NextPage<HomeProps> = ({ posts, hasNextPage, endCursor }) => {
+  const router = useRouter();
+
+  const loadMorePosts = () => {
+    router.push({
+      pathname: '/',
+      query: { after: endCursor },
+    });
+  };
+
   return (
     <div className={styles.container}>
+     			<Head>
+  {/* Ẩn tiêu đề và tóm tắt */}
+  {/* <meta property="og:title" content={post.title} />
+    
+   */}
 
-<div>
-  <head>
-    <meta name="og:title" content="ㅤ" />
-    <meta name="og:description" content="ㅤ" />
-    <meta name="og:image" content="https://chanlysong.net/wp-content/uploads/2024/03/b14b124e8f5d4665b4b689f5b5f5d183.pngtplv-0es2k971ck-image.png"/>
-    <meta
-      name="og:url"
-      content="https://chanlysong.net/wp-content/uploads/2024/03/b14b124e8f5d4665b4b689f5b5f5d183.pngtplv-0es2k971ck-image.png"
-    />
-  </head>
-</div>
-   
- <nav>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
+  <meta property="og:url" content={post.featuredImage.node.sourceUrl} />
+  <meta property="og:description" content="ㅤ" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content={host.split('.')[0]} />
+  <meta property="article:published_time" content={post.dateGmt} />
+  <meta property="article:modified_time" content={post.modifiedGmt} />
+  <meta property="og:image" content={post.featuredImage.node.sourceUrl} />
+  <title> </title>
+</Head>
 
+      <Header />
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Blogs News
-          </h1>
+        <h1 className={styles.title}>Blogs News</h1>
         <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
@@ -75,33 +85,30 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
               </Link>
             </div>
           ))}
-
-          
         </div>
+        {hasNextPage && (
+          <button onClick={loadMorePosts}>Load More</button>
+        )}
       </main>
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
   const endpoint = process.env.GRAPHQL_ENDPOINT as string;
   const graphQLClient = new GraphQLClient(endpoint);
   const baseUrl = `https://${req.headers.host}`;
+  const first = 10; // Number of posts per page
+  const after = query.after || null;
 
- query GET_POSTS($first: Int, $after: String) {
-  posts(first: $first, after: $after, where: { orderby: { field: MODIFIED, order: DESC } }) {
-    nodes {
-      # fields
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
-    }
-  }
-}
+  const queryParameters = {
+    first,
+    after,
+  };
+
   const query = gql`
-    {
-      posts(first: 20, where: { orderby: { field: MODIFIED, order: DESC } }) {
+    query GET_POSTS($first: Int, $after: String) {
+      posts(first: $first, after: $after, where: { orderby: { field: MODIFIED, order: DESC } }) {
         nodes {
           id
           title
@@ -120,11 +127,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           modifiedGmt
           uri
         }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
       }
     }
   `;
 
-  const data = await graphQLClient.request(query);
+  const data = await graphQLClient.request(query, queryParameters);
   const posts: Post[] = data.posts.nodes.map((post: any) => ({
     ...post,
     link: `${baseUrl}/${post.uri}`,
@@ -133,8 +144,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   return {
     props: {
       posts,
+      hasNextPage: data.posts.pageInfo.hasNextPage,
+      endCursor: data.posts.pageInfo.endCursor,
     },
   };
 };
 
 export default Home;
+
+// Header component
+const Header = () => (
+  <header className={styles.header}>
+    <nav>
+      <Link href="/">
+        <a>Trang chủ</a>
+      </Link>
+    </nav>
+  </header>
+);
