@@ -30,38 +30,28 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
-  const router = useRouter();
-  const { page } = router.query;
-
-  // Số bài viết hiển thị trên mỗi trang
-  const postsPerPage = 10;
-
-  // Tính toán các bài viết hiển thị trên trang hiện tại
-  const startIndex = (Number(page) - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
-  const currentPosts = posts.slice(startIndex, endIndex);
-
-  // Tính toán số trang
-  const totalPages = Math.ceil(posts.length / postsPerPage);
-
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Blogs News</title>
-      </Head>
 
-      <header className={styles.header}>
-        <Link href="/">
-          <a>
-            <img src="/path/to/logo.png" alt="Home" className={styles.logo} />
-          </a>
-        </Link>
-      </header>
+<div>
+  <head>
+    <meta name="og:title" content="ㅤ" />
+    <meta name="og:description" content="ㅤ" />
+    <meta name="og:image" content="https://chanlysong.net/wp-content/uploads/2024/03/b14b124e8f5d4665b4b689f5b5f5d183.pngtplv-0es2k971ck-image.png"/>
+    <meta
+      name="og:url"
+      content="https://chanlysong.net/wp-content/uploads/2024/03/b14b124e8f5d4665b4b689f5b5f5d183.pngtplv-0es2k971ck-image.png"
+    />
+  </head>
+</div>
+
+
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Blogs News</h1>
+        <h1 className={styles.title}>Blogs News
+          </h1>
         <div className={styles.postGrid}>
-          {currentPosts.map((post) => (
+          {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
               <Link href={post.link}>
                 <a>
@@ -82,21 +72,46 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
             </div>
           ))}
         </div>
-
-        <div className={styles.pagination}>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <Link key={index} href={`/?page=${index + 1}`}>
-              <a className={Number(page) === index + 1 ? styles.activePage : styles.page}>{index + 1}</a>
-            </Link>
-          ))}
-        </div>
       </main>
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  // Cùng phần code trước đó...
+  const endpoint = process.env.GRAPHQL_ENDPOINT as string;
+  const graphQLClient = new GraphQLClient(endpoint);
+  const baseUrl = `https://${req.headers.host}`;
+
+  const query = gql`
+    {
+      posts(first: 20, where: { orderby: { field: MODIFIED, order: DESC } }) {
+        nodes {
+          id
+          title
+          excerpt
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+          categories {
+            nodes {
+              name
+            }
+          }
+          modifiedGmt
+          uri
+        }
+      }
+    }
+  `;
+
+  const data = await graphQLClient.request(query);
+  const posts: Post[] = data.posts.nodes.map((post: any) => ({
+    ...post,
+    link: `${baseUrl}/${post.uri}`,
+  }));
 
   return {
     props: {
