@@ -30,28 +30,41 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
+  const router = useRouter();
+  const { page } = router.query;
+
+  // Số bài viết hiển thị trên mỗi trang
+  const postsPerPage = 10;
+
+  // Tính toán số trang
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+
+  // Lấy chỉ mục bắt đầu và kết thúc của bài viết trang hiện tại
+  const startIndex = (parseInt(page as string) - 1) * postsPerPage;
+  const endIndex = startIndex + postsPerPage;
+
+  // Lấy danh sách bài viết trang hiện tại
+  const currentPosts = posts.slice(startIndex, endIndex);
+
   return (
     <div className={styles.container}>
+      <Head>
+        <title>My Blog</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-<div>
-  <head>
-    <meta name="og:title" content="ㅤ" />
-    <meta name="og:description" content="ㅤ" />
-    <meta name="og:image" content="https://chanlysong.net/wp-content/uploads/2024/03/b14b124e8f5d4665b4b689f5b5f5d183.pngtplv-0es2k971ck-image.png"/>
-    <meta
-      name="og:url"
-      content="https://chanlysong.net/wp-content/uploads/2024/03/b14b124e8f5d4665b4b689f5b5f5d183.pngtplv-0es2k971ck-image.png"
-    />
-  </head>
-</div>
-
-
+      <header className={styles.header}>
+        <Link href="/">
+          <a>
+            <img src="/logo.png" alt="Home" className={styles.logo} />
+          </a>
+        </Link>
+      </header>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Blogs News
-          </h1>
+        <h1 className={styles.title}>Blogs News</h1>
         <div className={styles.postGrid}>
-          {posts.map((post) => (
+          {currentPosts.map((post) => (
             <div key={post.id} className={styles.postCard}>
               <Link href={post.link}>
                 <a>
@@ -70,6 +83,14 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
                 </a>
               </Link>
             </div>
+          ))}
+        </div>
+
+        <div className={styles.pagination}>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Link href={`/?page=${index + 1}`} key={index}>
+              <a className={parseInt(page as string) === index + 1 ? styles.activePage : undefined}>{index + 1}</a>
+            </Link>
           ))}
         </div>
       </main>
