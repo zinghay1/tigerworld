@@ -62,8 +62,8 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
       </header>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Blogs News</h1>
- <div className={styles.postGrid}>
+        
+  <div className={styles.postGrid}>
           {posts.map((post) => (
             <div key={post.id} className={styles.postCard}>
               <Link href={post.link}>
@@ -74,7 +74,6 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
                     className={styles.postImage}
                   />
                   <h2 className={styles.postTitle}>{post.title}</h2>
-                                </Link>
                   <div className={styles.postMeta}>
                     <span className={styles.postCategory}>
                       {post.categories.nodes.map((category) => category.name).join(', ')}
@@ -82,6 +81,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
                     <span className={styles.postDate}>{new Date(post.modifiedGmt).toLocaleDateString()}</span>
                   </div>
                 </a>
+              </Link>
             </div>
           ))}
         </div>
