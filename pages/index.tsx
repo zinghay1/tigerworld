@@ -86,13 +86,19 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
           ))}
         </div>
 
-        <div className={styles.pagination}>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <Link href={`/?page=${index + 1}`} key={index}>
-              <a className={parseInt(page as string) === index + 1 ? styles.activePage : undefined}>{index + 1}</a>
-            </Link>
-          ))}
-        </div>
+<nav>
+  <ul className="pagination">
+    {Array.from({ length: totalPages }, (_, index) => (
+      <li className={`page-item ${parseInt(page as string) === index + 1 ? 'active' : ''}`} key={index}>
+        <Link href={`/?page=${index + 1}`}>
+          <a className="page-link">{index + 1}</a>
+        </Link>
+      </li>
+    ))}
+  </ul>
+</nav>
+        
+       
       </main>
     </div>
   );
