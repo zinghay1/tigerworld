@@ -87,8 +87,7 @@ const Home: NextPage<HomeProps> = ({ posts, hasNextPage, endCursor }) => {
     </div>
   );
 };
-
-export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, query: queryParams }) => {
   const endpoint = process.env.GRAPHQL_ENDPOINT as string;
   const graphQLClient = new GraphQLClient(endpoint);
   const baseUrl = `https://${req.headers.host}`;
