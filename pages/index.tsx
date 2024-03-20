@@ -4,7 +4,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GraphQLClient, gql } from 'graphql-request';
 import styles from '../styles/Home.module.css';
-
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+  crossorigin="anonymous"
+/>
 interface Post {
   id: string;
   title: string;
@@ -49,33 +54,33 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>My Blog</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
 
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-  <div className="container">
-    <Link href="/">
-      <a className="navbar-brand">
-        <img src="/logo.png" alt="Home" className={styles.logo} />
-      </a>
-    </Link>
-    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span className="navbar-toggler-icon"></span>
-    </button>
-    <div className="collapse navbar-collapse" id="navbarNav">
-      <ul className="navbar-nav ml-auto">
-        {posts.map((post) => (
-          <li className="nav-item" key={post.id}>
-            <Link href={post.link}>
-              <a className="nav-link">{post.title}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+<nav className="navbar navbar-expand-lg navbar-light bg-light">
+  <a className="navbar-brand" href="/">Blog</a>
+  <button 
+    className="navbar-toggler" 
+    type="button"
+    data-toggle="collapse" 
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span className="navbar-toggler-icon"></span>
+  </button>
+  <div className="collapse navbar-collapse" id="navbarNav">
+    <ul className="navbar-nav">
+      {categories.map(category => (
+        <li key={category.id} className="nav-item">
+          <a className="nav-link" href={`/category/${category.slug}`}>
+            {category.name}  
+          </a>
+        </li>
+      ))}
+    </ul>
   </div>
 </nav>
+        
       <header className={styles.header}>
         <Link href="/">
           <a>
@@ -110,15 +115,13 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
         </div>
 
 <nav>
-  <ul className="pagination">
-    {Array.from({ length: totalPages }, (_, index) => (
-      <li className={`page-item ${parseInt(page as string) === index + 1 ? 'active' : ''}`} key={index}>
-        <Link href={`/?page=${index + 1}`}>
-          <a className="page-link">{index + 1}</a>
-        </Link>
-      </li>
-    ))}
-  </ul>
+<div className="pagination justify-content-center">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Link href={`/?page=${index + 1}`} key={index}>
+              <a className={parseInt(page as string) === index + 1 ? styles.activePage : undefined}>{index + 1}</a>
+            </Link>
+          ))}
+  </div>
 </nav>
         
        
