@@ -49,27 +49,10 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   return (
     <div className={styles.container}>
       <Head>
+        <title>My Blog</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-<nav className="navbar navbar-light bg-light">
-  <div className="container-fluid">
-    <Link href="/">
-      <a className="navbar-brand">Blog Title</a>
-    </Link>
-
-    <div className="collapse navbar-collapse" id="navbarNav">
-      <ul className="navbar-nav">
-        {categories.map(category => (
-          <li key={category.id} className="nav-item">
-            <Link href={`/category/${category.slug}`}>
-              <a className="nav-item nav-link">{category.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-</nav>
-        
       <header className={styles.header}>
         <Link href="/">
           <a>
@@ -103,21 +86,13 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
           ))}
         </div>
 
-<nav>
-<div className="pagination">
-  <ul className="pagination">
-    {Array.from({ length: totalPages }, (_, index) => (
-      <li key={index} className={`page-item${index === currentPage - 1 ? ' active' : ''}`}>
-        <Link href={`/?page=${index + 1}`}>
-          <a className="page-link">{index + 1}</a>
-        </Link>  
-      </li>
-    ))}
-  </ul>
-</div>
-</nav>
-        
-       
+        <div className={styles.pagination}>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Link href={`/?page=${index + 1}`} key={index}>
+              <a className={parseInt(page as string) === index + 1 ? styles.activePage : undefined}>{index + 1}</a>
+            </Link>
+          ))}
+        </div>
       </main>
     </div>
   );
