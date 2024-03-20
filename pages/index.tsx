@@ -44,6 +44,11 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
     />
   </head>
 </div>
+header>
+    <nav>
+      <Link href="/">
+        <a>Home</a>
+      </Link>
 
 
 
