@@ -44,12 +44,11 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
     />
   </head>
 </div>
-header>
-    <nav>
+   
+ <nav>
       <Link href="/">
         <a>Home</a>
       </Link>
-
 
 
       <main className={styles.main}>
@@ -76,6 +75,8 @@ header>
               </Link>
             </div>
           ))}
+
+          
         </div>
       </main>
     </div>
@@ -87,6 +88,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const graphQLClient = new GraphQLClient(endpoint);
   const baseUrl = `https://${req.headers.host}`;
 
+ query GET_POSTS($first: Int, $after: String) {
+  posts(first: $first, after: $after, where: { orderby: { field: MODIFIED, order: DESC } }) {
+    nodes {
+      # fields
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
   const query = gql`
     {
       posts(first: 20, where: { orderby: { field: MODIFIED, order: DESC } }) {
