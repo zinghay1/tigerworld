@@ -53,6 +53,29 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+  <div className="container">
+    <Link href="/">
+      <a className="navbar-brand">
+        <img src="/logo.png" alt="Home" className={styles.logo} />
+      </a>
+    </Link>
+    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span className="navbar-toggler-icon"></span>
+    </button>
+    <div className="collapse navbar-collapse" id="navbarNav">
+      <ul className="navbar-nav ml-auto">
+        {posts.map((post) => (
+          <li className="nav-item" key={post.id}>
+            <Link href={post.link}>
+              <a className="nav-link">{post.title}</a>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</nav>
       <header className={styles.header}>
         <Link href="/">
           <a>
